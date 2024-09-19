@@ -1,0 +1,30 @@
+{
+  "template": "https://github.com/scverse/cookiecutter-scverse",
+  "commit": "4c8f4683073074b201a45b173d91b2a352d4a194",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "dummy-anndata",
+      "package_name": "dummy_anndata",
+      "project_description": "Allows generating dummy anndata objects, useful for testing.",
+      "author_full_name": "Louise Deconinck",
+      "author_email": "louise.deconinck@gmail.com",
+      "github_user": "LouiseDck",
+      "github_repo": "dummy-anndata",
+      "license": "MIT License",
+      "ide_integration": true,
+      "_copy_without_render": [
+        ".github/workflows/build.yaml",
+        ".github/workflows/test.yaml",
+        "docs/_templates/autosummary/**.rst"
+      ],
+      "_render_devdocs": false,
+      "_jinja2_env_vars": {
+        "lstrip_blocks": true,
+        "trim_blocks": true
+      },
+      "_template": "https://github.com/scverse/cookiecutter-scverse"
+    }
+  },
+  "directory": null
+}
