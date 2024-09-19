@@ -3,7 +3,7 @@
 [![Tests][badge-tests]][link-tests]
 [![Documentation][badge-docs]][link-docs]
 
-[badge-tests]: https://img.shields.io/github/actions/workflow/status/LouiseDck/dummy-anndata/test.yaml?branch=main
+[badge-tests]: https://img.shields.io/github/actions/workflow/status/data-intuitive/dummy-anndata/test.yaml?branch=main
 [link-tests]: https://github.com/LouiseDck/dummy-anndata/actions/workflows/test.yml
 [badge-docs]: https://img.shields.io/readthedocs/dummy-anndata
 
@@ -33,7 +33,7 @@ pip install dummy-anndata
 1. Install the latest development version:
 
 ```bash
-pip install git+https://github.com/LouiseDck/dummy-anndata.git@main
+pip install git+https://github.com/data-intuitive/dummy-anndata.git@main
 ```
 
 ## Release notes
@@ -50,7 +50,7 @@ If you found a bug, please use the [issue tracker][issue-tracker].
 > t.b.a
 
 [scverse-discourse]: https://discourse.scverse.org/
-[issue-tracker]: https://github.com/LouiseDck/dummy-anndata/issues
+[issue-tracker]: https://github.com/data-intuitive/dummy-anndata/issues
 [changelog]: https://dummy-anndata.readthedocs.io/latest/changelog.html
 [link-docs]: https://dummy-anndata.readthedocs.io
 [link-api]: https://dummy-anndata.readthedocs.io/latest/api.html
