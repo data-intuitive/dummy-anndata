@@ -1,5 +1,5 @@
-from generate_vector import vector_generators
-from generate_matrix import matrix_generators
+from .generate_vector import vector_generators
+from .generate_matrix import matrix_generators
 
 import pandas as pd
 import numpy as np
