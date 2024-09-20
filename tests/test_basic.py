@@ -7,6 +7,9 @@ def test_package_has_version():
     assert dummy_anndata.__version__ is not None
 
 
-@pytest.mark.skip(reason="This decorator should be removed when test passes.")
-def test_example():
-    assert 1 == 0  # This test is designed to fail.
+# This test test whether or not all the functions in the package
+# work.
+def test_generating_dataset(tmp_path):
+    dummy = dummy_anndata.generate_dataset()
+    filename = tmp_path / "dummy.h5ad"
+    dummy.write_h5ad(filename)
