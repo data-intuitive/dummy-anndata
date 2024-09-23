@@ -52,10 +52,14 @@ def generate_dataset(
         obs_types = list(vector_generators.keys())
     if var_types is None:  # var_types are all vectors
         var_types = list(vector_generators.keys())
-    if obsm_types is None:  # obsm_types are all matrices or vectors
-        obsm_types = list(matrix_generators.keys()) + list(vector_generators.keys())
-    if varm_types is None:  # varm_types are all matrices or vectors
-        varm_types = list(matrix_generators.keys()) + list(vector_generators.keys())
+    if obsm_types is None:  # obsm_types are all matrices or vectors, except for categoricals and nullables
+        vector_not_allowed = set(["categorical", "categorical_ordered", "categorical_missing_values", "categorical_ordered_missing_values", \
+                                  "nullable_integer_array", "nullable_boolean_array"])
+        obsm_types = set(matrix_generators.keys()) - vector_not_allowed 
+    if varm_types is None:  # varm_types are all matrices or vectors, except for categoricals and nullables
+        vector_not_allowed = set(["categorical", "categorical_ordered", "categorical_missing_values", "categorical_ordered_missing_values", \
+                                  "nullable_integer_array", "nullable_boolean_array"])
+        varm_types = set(matrix_generators.keys()) - vector_not_allowed 
     if obsp_types is None:  # obsp_types are all matrices
         obsp_types = list(matrix_generators.keys())
     if varp_types is None:  # varp_types are all matrices
