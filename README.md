@@ -14,7 +14,7 @@ You need to have Python 3.10 or newer installed on your system. If you don't hav
 Python installed, we recommend installing [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge).
 
 ```bash
-pip install git+https://github.com/data-intuitive/dummy-anndata.git@main
+pip install dummy-anndata
 ```
 
 ## Example usage

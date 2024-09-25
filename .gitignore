@@ -21,3 +21,6 @@ __pycache__/
 
 # vscode
 .vscode/
+
+# conda
+.conda/
