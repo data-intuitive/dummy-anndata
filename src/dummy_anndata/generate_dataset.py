@@ -21,6 +21,44 @@ def generate_dataset(
     varp_types=None,
     uns_types=None,
 ):
+    """
+    Generate a synthetic AnnData dataset with specified dimensions and data types.
+
+    Parameters:
+    -----------
+    n_obs : int, optional (default=10)
+        Number of observations (cells).
+    n_vars : int, optional (default=20)
+        Number of variables (genes).
+    x_type : str, optional (default="generate_integer_matrix")
+        Type of matrix to generate for the main data matrix `X`. Must be a key in `matrix_generators`.
+    layer_types : list of str, optional
+        Types of matrices to generate for layers. Each type must be a key in `matrix_generators`.
+    obs_types : list of str, optional
+        Types of vectors to generate for `obs`. Each type must be a key in `vector_generators`.
+    var_types : list of str, optional
+        Types of vectors to generate for `var`. Each type must be a key in `vector_generators`.
+    obsm_types : list of str, optional
+        Types of matrices or vectors to generate for `obsm`. Each type must be a key in `matrix_generators` or `vector_generators`.
+    varm_types : list of str, optional
+        Types of matrices or vectors to generate for `varm`. Each type must be a key in `matrix_generators` or `vector_generators`.
+    obsp_types : list of str, optional
+        Types of matrices to generate for `obsp`. Each type must be a key in `matrix_generators`.
+    varp_types : list of str, optional
+        Types of matrices to generate for `varp`. Each type must be a key in `matrix_generators`.
+    uns_types : list of str, optional
+        Types of data to generate for `uns`. Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators`.
+
+    Returns:
+    --------
+    ad.AnnData
+        An AnnData object containing the generated dataset with the specified dimensions and data types.
+
+    Raises:
+    -------
+    AssertionError
+        If any of the specified types are not recognized by the corresponding generator dictionaries.
+    """
 
     assert x_type in matrix_generators, f"Unknown matrix type: {x_type}"
 
