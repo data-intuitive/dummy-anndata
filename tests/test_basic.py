@@ -21,5 +21,3 @@ def test_uns():
 
     dummy_no_nested = dummy_anndata.generate_dataset(nested_uns_types=[])
     assert "nested" not in dummy_no_nested.uns
-
-
