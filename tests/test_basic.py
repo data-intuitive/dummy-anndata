@@ -1,5 +1,3 @@
-import pytest
-
 import dummy_anndata
 
 
@@ -13,3 +11,9 @@ def test_generating_dataset(tmp_path):
     dummy = dummy_anndata.generate_dataset()
     filename = tmp_path / "dummy.h5ad"
     dummy.write_h5ad(filename)
+
+
+def test_empty_uns():
+    dummy = dummy_anndata.generate_dataset(uns_types=[])
+
+    assert dummy.uns == {}

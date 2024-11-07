@@ -1,8 +1,7 @@
-from .generate_vector import vector_generators
-from .generate_matrix import matrix_generators
-
-import pandas as pd
 import numpy as np
+
+from .generate_matrix import matrix_generators
+from .generate_vector import vector_generators
 
 scalar_generators = {
     "string": "version",
@@ -34,17 +33,13 @@ def generate_type(type, n_rows, n_cols):
 
 def generate_dict(n_rows, n_cols, types=None, nested=True):
     if types is None:  # types are all vectors and all matrices
-        scalar_types = list(scalar_generators.keys()) + [
-            f"scalar_{t}" for t in vector_generators.keys()
-        ]
-        types = (
-            scalar_types
-            + list(vector_generators.keys())
-            + list(matrix_generators.keys())
-        )
+        scalar_types = list(scalar_generators.keys()) + [f"scalar_{t}" for t in vector_generators.keys()]
+        types = scalar_types + list(vector_generators.keys()) + list(matrix_generators.keys())
 
-    data = {t: generate_type(t, n_rows, n_cols) for t in types}
-    if nested:
-        data["nested"] = generate_dict(n_rows, n_cols, types, False)
+    data = {}
+    if types:  # types is not empty
+        data = {t: generate_type(t, n_rows, n_cols) for t in types}
+        if nested:
+            data["nested"] = generate_dict(n_rows, n_cols, types, False)
 
     return data
