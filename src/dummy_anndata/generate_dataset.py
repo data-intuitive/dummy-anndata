@@ -1,5 +1,7 @@
 import anndata as ad
 
+from collections.abc import Iterable
+
 from .generate_matrix import matrix_generators
 from .generate_vector import vector_generators
 from .generate_dataframe import generate_dataframe
