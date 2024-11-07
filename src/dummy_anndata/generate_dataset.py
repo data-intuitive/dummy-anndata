@@ -1,9 +1,11 @@
 import anndata as ad
 
+from collections.abc import Iterable
+
+from .generate_dataframe import generate_dataframe
+from .generate_dict import generate_dict, scalar_generators
 from .generate_matrix import matrix_generators
 from .generate_vector import vector_generators
-from .generate_dataframe import generate_dataframe
-from .generate_dict import scalar_generators, generate_dict
 
 
 def generate_dataset(
@@ -21,6 +23,16 @@ def generate_dataset(
 ):
 
     assert x_type in matrix_generators, f"Unknown matrix type: {x_type}"
+
+    check_iterable_types(layer_types, "layer_types")
+    check_iterable_types(obs_types, "obs_types")
+    check_iterable_types(var_types, "var_types")
+    check_iterable_types(obsm_types, "obsm_types")
+    check_iterable_types(varm_types, "varm_types")
+    check_iterable_types(obsp_types, "obsp_types")
+    check_iterable_types(varp_types, "varp_types")
+    check_iterable_types(uns_types, "uns_types")
+
     assert layer_types is None or all(
         t in matrix_generators.keys() for t in layer_types
     ), "Unknown layer type"
@@ -55,11 +67,11 @@ def generate_dataset(
     if obsm_types is None:  # obsm_types are all matrices or vectors, except for categoricals and nullables
         vector_not_allowed = set(["categorical", "categorical_ordered", "categorical_missing_values", "categorical_ordered_missing_values", \
                                   "nullable_integer_array", "nullable_boolean_array"])
-        obsm_types = set(matrix_generators.keys()) - vector_not_allowed 
+        obsm_types = set(matrix_generators.keys()) - vector_not_allowed
     if varm_types is None:  # varm_types are all matrices or vectors, except for categoricals and nullables
         vector_not_allowed = set(["categorical", "categorical_ordered", "categorical_missing_values", "categorical_ordered_missing_values", \
                                   "nullable_integer_array", "nullable_boolean_array"])
-        varm_types = set(matrix_generators.keys()) - vector_not_allowed 
+        varm_types = set(matrix_generators.keys()) - vector_not_allowed
     if obsp_types is None:  # obsp_types are all matrices
         obsp_types = list(matrix_generators.keys())
     if varp_types is None:  # varp_types are all matrices
@@ -112,3 +124,7 @@ def generate_dataset(
         varp=varp,
         uns=uns,
     )
+
+
+def check_iterable_types(iterable_types, name):
+    assert iterable_types is None or (isinstance(iterable_types, Iterable) and not isinstance(iterable_types, str)), f"{name} should be a non-string iterable type"
