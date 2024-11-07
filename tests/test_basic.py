@@ -14,6 +14,17 @@ def test_generating_dataset(tmp_path):
 
 
 def test_empty_uns():
-    dummy = dummy_anndata.generate_dataset(uns_types=[])
+    dummy = dummy_anndata.generate_dataset(uns_types=[], nested_uns_types=[])
 
     assert dummy.uns == {}
+
+
+def test_nested_uns():
+    dummy = dummy_anndata.generate_dataset(uns_types=[])
+
+    assert "nested" in dummy.uns and dummy.uns["nested"] == {}
+
+def test_nested_uns_types():
+    dummy = dummy_anndata.generate_dataset(uns_types=[])
+
+    assert "nested" not in dummy.uns
