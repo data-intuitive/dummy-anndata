@@ -11,7 +11,7 @@ from .generate_vector import vector_generators
 def generate_dataset(
     n_obs=10,
     n_vars=20,
-    x_type="generate_integer_matrix",
+    x_type="integer_matrix",
     layer_types=None,
     obs_types=None,
     var_types=None,
