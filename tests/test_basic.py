@@ -12,8 +12,12 @@ def test_generating_dataset(tmp_path):
     filename = tmp_path / "dummy.h5ad"
     dummy.write_h5ad(filename)
 
+def test_uns():
+    dummy_empty = dummy_anndata.generate_dataset(uns_types=[], nested_uns_types=[])
+    assert dummy_empty.uns == {}
 
-def test_empty_uns():
-    dummy = dummy_anndata.generate_dataset(uns_types=[])
+    dummy_nested = dummy_anndata.generate_dataset(uns_types=[])
+    assert "nested" in dummy_nested.uns and dummy_nested.uns["nested"] != {}
 
-    assert dummy.uns == {}
+    dummy_no_nested = dummy_anndata.generate_dataset(nested_uns_types=[])
+    assert "nested" not in dummy_no_nested.uns

@@ -20,6 +20,7 @@ def generate_dataset(
     obsp_types=None,
     varp_types=None,
     uns_types=None,
+    nested_uns_types=None,
 ):
     """
     Generate a synthetic AnnData dataset with specified dimensions and data types.
@@ -48,6 +49,9 @@ def generate_dataset(
         Types of matrices to generate for `varp`. Each type must be a key in `matrix_generators`.
     uns_types : list of str, optional
         Types of data to generate for `uns`. Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators`.
+    nested_uns_types : list of str, optional
+        Types of data to generate for the nested `uns` dictionary. They will be a new dictionary at the key `nested`.
+        Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators`.
 
     Returns:
     --------
@@ -70,6 +74,7 @@ def generate_dataset(
     check_iterable_types(obsp_types, "obsp_types")
     check_iterable_types(varp_types, "varp_types")
     check_iterable_types(uns_types, "uns_types")
+    check_iterable_types(nested_uns_types, "nested_uns_types")
 
     assert layer_types is None or all(
         t in matrix_generators.keys() for t in layer_types
@@ -120,6 +125,12 @@ def generate_dataset(
             + list(matrix_generators.keys())
             + list(scalar_generators.keys())
         )
+    if nested_uns_types is None:
+        nested_uns_types = (
+            list(vector_generators.keys())
+            + list(matrix_generators.keys())
+            + list(scalar_generators.keys())
+        )
 
     X = matrix_generators[x_type](n_obs, n_vars)
     layers = {t: matrix_generators[t](n_obs, n_vars) for t in layer_types}
@@ -149,7 +160,7 @@ def generate_dataset(
     obsp = {t: matrix_generators[t](n_obs, n_obs) for t in obsp_types}
     varp = {t: matrix_generators[t](n_vars, n_vars) for t in varp_types}
 
-    uns = generate_dict(n_obs, n_vars, uns_types)
+    uns = generate_dict(n_obs, n_vars, uns_types, nested_uns_types)
 
     return ad.AnnData(
         X,
