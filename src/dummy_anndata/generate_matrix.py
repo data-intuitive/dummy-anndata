@@ -18,27 +18,27 @@ def int_mtx(n_obs, n_vars):
 # Possible matrix generators
 # integer matrices do not support NAs in Python
 matrix_generators = {
-    "generate_float_matrix": lambda n_obs, n_vars: float_mtx(n_obs, n_vars),
-    "generate_float_matrix_nas": lambda n_obs, n_vars: float_mtx(
+    "float_matrix": lambda n_obs, n_vars: float_mtx(n_obs, n_vars),
+    "float_matrix_nas": lambda n_obs, n_vars: float_mtx(
         n_obs, n_vars, NAs=True
     ),
-    "generate_float_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(
+    "float_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(
         float_mtx(n_obs, n_vars)
     ),
-    "generate_float_csparse_nas": lambda n_obs, n_vars: sp.sparse.csc_matrix(
+    "float_csparse_nas": lambda n_obs, n_vars: sp.sparse.csc_matrix(
         float_mtx(n_obs, n_vars, NAs=True)
     ),
-    "generate_float_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(
+    "float_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(
         float_mtx(n_obs, n_vars)
     ),
-    "generate_float_rsparse_nas": lambda n_obs, n_vars: sp.sparse.csr_matrix(
+    "float_rsparse_nas": lambda n_obs, n_vars: sp.sparse.csr_matrix(
         float_mtx(n_obs, n_vars, NAs=True)
     ),
-    "generate_integer_matrix": lambda n_obs, n_vars: int_mtx(n_obs, n_vars),
-    "generate_integer_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(
+    "integer_matrix": lambda n_obs, n_vars: int_mtx(n_obs, n_vars),
+    "integer_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(
         int_mtx(n_obs, n_vars)
     ),
-    "generate_integer_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(
+    "integer_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(
         int_mtx(n_obs, n_vars)
     ),
 }
