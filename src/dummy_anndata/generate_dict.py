@@ -16,7 +16,7 @@ scalar_generators = {
     "nan": np.nan,
 }
 
-generated_scalar_types = Union[str, int, float, bool, None, np.nan]
+generated_scalar_types = Union[str, int, float, bool, None, np.float64]
 
 def generate_scalar(scalar_type):
     if scalar_type[:7] == "scalar_":
