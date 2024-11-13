@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 def nullable_integer_array(n):
@@ -31,18 +31,10 @@ def missing_values_categorical(n, ordered=True):
 
 
 vector_generators = {
-    "categorical": lambda n: pd.Categorical(
-        [["Value1", "Value2"][i % 2] for i in range(n)]
-    ),
-    "categorical_ordered": lambda n: pd.Categorical(
-        [["Value1", "Value2"][i % 2] for i in range(n)], ordered=True
-    ),
-    "categorical_missing_values": lambda n: missing_values_categorical(
-        n, ordered=False
-    ),
-    "categorical_ordered_missing_values": lambda n: missing_values_categorical(
-        n, ordered=True
-    ),
+    "categorical": lambda n: pd.Categorical([["Value1", "Value2"][i % 2] for i in range(n)]),
+    "categorical_ordered": lambda n: pd.Categorical([["Value1", "Value2"][i % 2] for i in range(n)], ordered=True),
+    "categorical_missing_values": lambda n: missing_values_categorical(n, ordered=False),
+    "categorical_ordered_missing_values": lambda n: missing_values_categorical(n, ordered=True),
     "string_array": lambda n: np.array([f"value_{i}" for i in range(n)]),
     # should we also check a 1d sparse array? We should probably leave it for the matrix generation?
     "dense_array": lambda n: np.arange(n, dtype=float) + 0.5,
@@ -52,21 +44,24 @@ vector_generators = {
     "nullable_boolean_array": nullable_boolean_array,
 }
 
+generated_vector_types = np.ndarray | pd.Categorical | pd.arrays.IntegerArray | pd.arrays.BooleanArray
 
-def generate_vector(n, vector_type):
+def generate_vector(n: int, vector_type: str) -> generated_vector_types:
     """
-    Generate a vector of a specified type.
+    Generate a vector of a specified type and length.
 
     Parameters:
-    vector_type (str): The type of vector to generate.
-    n (int): The length of the vector.
+        n (int): The length of the vector to generate.
+        vector_type (str): The type of vector to generate. Must be one of the keys in the `vector_generators` dictionary.
 
     Returns:
-    list: The generated vector.
+        np.ndarray | pd.Categorical | pd.arrays.IntegerArray | pd.arrays.BooleanArray:
+        A vector of the specified type and length.
 
     Raises:
-    AssertionError: If the vector_type is unknown.
+        AssertionError: If `vector_type` is not a valid key in `vector_generators`.
     """
+
     # check if vector_type is valid
     assert vector_type in vector_generators, f"Unknown vector type: {vector_type}"
 
