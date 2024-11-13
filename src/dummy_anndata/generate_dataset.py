@@ -9,19 +9,19 @@ from .generate_vector import vector_generators
 
 
 def generate_dataset(
-    n_obs=10,
-    n_vars=20,
-    x_type=None,
-    layer_types=None,
-    obs_types=None,
-    var_types=None,
-    obsm_types=None,
-    varm_types=None,
-    obsp_types=None,
-    varp_types=None,
-    uns_types=None,
-    nested_uns_types=None,
-):
+    n_obs: int = 10,
+    n_vars: int = 20,
+    x_type: str | None = None,
+    layer_types: list[str] | None = None,
+    obs_types: list[str] | None = None,
+    var_types: list[str] | None = None,
+    obsm_types: list[str] | None = None,
+    varm_types: list[str] | None = None,
+    obsp_types: list[str] | None = None,
+    varp_types: list[str] | None = None,
+    uns_types: list[str] | None = None,
+    nested_uns_types: list[str] | None = None,
+) -> ad.AnnData:
     """
     Generate a synthetic AnnData dataset with specified dimensions and data types.
 
@@ -105,7 +105,7 @@ def generate_dataset(
                 "nullable_boolean_array",
             ]
         )
-        obsm_types = set(matrix_generators.keys()) - vector_not_allowed
+        obsm_types = list(set(matrix_generators.keys()) - vector_not_allowed)
     if varm_types is None:  # varm_types are all matrices or vectors, except for categoricals and nullables
         vector_not_allowed = set(
             [
@@ -117,7 +117,8 @@ def generate_dataset(
                 "nullable_boolean_array",
             ]
         )
-        varm_types = set(matrix_generators.keys()) - vector_not_allowed
+        varm_types = list(set(matrix_generators.keys()) - vector_not_allowed)
+
     if obsp_types is None:  # obsp_types are all matrices
         obsp_types = list(matrix_generators.keys())
     if varp_types is None:  # varp_types are all matrices

@@ -19,44 +19,35 @@ def int_mtx(n_obs, n_vars):
 # integer matrices do not support NAs in Python
 matrix_generators = {
     "float_matrix": lambda n_obs, n_vars: float_mtx(n_obs, n_vars),
-    "float_matrix_nas": lambda n_obs, n_vars: float_mtx(
-        n_obs, n_vars, NAs=True
-    ),
-    "float_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(
-        float_mtx(n_obs, n_vars)
-    ),
-    "float_csparse_nas": lambda n_obs, n_vars: sp.sparse.csc_matrix(
-        float_mtx(n_obs, n_vars, NAs=True)
-    ),
-    "float_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(
-        float_mtx(n_obs, n_vars)
-    ),
-    "float_rsparse_nas": lambda n_obs, n_vars: sp.sparse.csr_matrix(
-        float_mtx(n_obs, n_vars, NAs=True)
-    ),
+    "float_matrix_nas": lambda n_obs, n_vars: float_mtx(n_obs, n_vars, NAs=True),
+    "float_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(float_mtx(n_obs, n_vars)),
+    "float_csparse_nas": lambda n_obs, n_vars: sp.sparse.csc_matrix(float_mtx(n_obs, n_vars, NAs=True)),
+    "float_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(float_mtx(n_obs, n_vars)),
+    "float_rsparse_nas": lambda n_obs, n_vars: sp.sparse.csr_matrix(float_mtx(n_obs, n_vars, NAs=True)),
     "integer_matrix": lambda n_obs, n_vars: int_mtx(n_obs, n_vars),
-    "integer_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(
-        int_mtx(n_obs, n_vars)
-    ),
-    "integer_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(
-        int_mtx(n_obs, n_vars)
-    ),
+    "integer_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(int_mtx(n_obs, n_vars)),
+    "integer_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(int_mtx(n_obs, n_vars)),
 }
 
+generated_matrix_types = np.ndarray | sp.sparse.csc_matrix | sp.sparse.csr_matrix
 
-def generate_matrix(n_obs, n_vars, matrix_type):
+def generate_matrix(n_obs: int, n_vars: int, matrix_type: str) -> generated_matrix_types:
     """
     Generate a matrix of given dimensions and type.
 
-    Parameters:
+    Parameters
+    ----------
         n_obs (int): The number of observations (rows) in the matrix.
         n_vars (int): The number of variables (columns) in the matrix.
         matrix_type (str): The type of matrix to generate.
 
-    Returns:
-        The generated matrix, either numpy.ndarray or scipy.sparse.csc_matrix or scipy.sparse.csr_matrix.
+    Returns
+    -------
+        np.ndarray | sp.sparse.csc_matrix | sp.sparse.csr_matrix:
+        The generated matrix.
 
-    Raises:
+    Raises
+    ------
         AssertionError: If the matrix_type is unknown.
 
     """
