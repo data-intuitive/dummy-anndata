@@ -3,7 +3,7 @@ import pandas as pd
 from .generate_vector import vector_generators
 
 
-def generate_dataframe(n_rows: int, types: list[str] | None = None):
+def generate_dataframe(n_rows: int, types: list[str] | None = None) -> pd.DataFrame:
     """
     Generate a pandas DataFrame with specified number of rows and column types.
 

@@ -1,5 +1,7 @@
 import numpy as np
 
+from typing import Union
+
 from .generate_matrix import matrix_generators, generated_matrix_types
 from .generate_vector import vector_generators, generated_vector_types
 
@@ -14,7 +16,7 @@ scalar_generators = {
     "nan": np.nan,
 }
 
-generated_scalar_types = str | int | float | bool | None | np.nan
+generated_scalar_types = Union[str, int, float, bool, None, np.nan]
 
 def generate_scalar(scalar_type):
     if scalar_type[:7] == "scalar_":
