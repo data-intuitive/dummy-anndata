@@ -1,6 +1,6 @@
-import anndata as ad
-
 from collections.abc import Iterable
+
+import anndata as ad
 
 from .generate_dataframe import generate_dataframe
 from .generate_dict import generate_dict, scalar_generators
@@ -11,7 +11,7 @@ from .generate_vector import vector_generators
 def generate_dataset(
     n_obs=10,
     n_vars=20,
-    x_type="integer_matrix",
+    x_type=None,
     layer_types=None,
     obs_types=None,
     var_types=None,
@@ -25,13 +25,13 @@ def generate_dataset(
     """
     Generate a synthetic AnnData dataset with specified dimensions and data types.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     n_obs : int, optional (default=10)
         Number of observations (cells).
     n_vars : int, optional (default=20)
         Number of variables (genes).
-    x_type : str, optional (default="generate_integer_matrix")
+    x_type : str, optional
         Type of matrix to generate for the main data matrix `X`. Must be a key in `matrix_generators`.
     layer_types : list of str, optional
         Types of matrices to generate for layers. Each type must be a key in `matrix_generators`.
@@ -53,18 +53,17 @@ def generate_dataset(
         Types of data to generate for the nested `uns` dictionary. They will be a new dictionary at the key `nested`.
         Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators`.
 
-    Returns:
-    --------
+    Returns
+    -------
     ad.AnnData
         An AnnData object containing the generated dataset with the specified dimensions and data types.
 
-    Raises:
-    -------
+    Raises
+    ------
     AssertionError
         If any of the specified types are not recognized by the corresponding generator dictionaries.
     """
-
-    assert x_type in matrix_generators, f"Unknown matrix type: {x_type}"
+    assert x_type is None or x_type in matrix_generators, f"Unknown matrix type: {x_type}"
 
     check_iterable_types(layer_types, "layer_types")
     check_iterable_types(obs_types, "obs_types")
@@ -76,29 +75,17 @@ def generate_dataset(
     check_iterable_types(uns_types, "uns_types")
     check_iterable_types(nested_uns_types, "nested_uns_types")
 
-    assert layer_types is None or all(
-        t in matrix_generators.keys() for t in layer_types
-    ), "Unknown layer type"
-    assert obs_types is None or all(
-        t in vector_generators.keys() for t in obs_types
-    ), "Unknown obs type"
-    assert var_types is None or all(
-        t in vector_generators.keys() for t in var_types
-    ), "Unknown var type"
+    assert layer_types is None or all(t in matrix_generators.keys() for t in layer_types), "Unknown layer type"
+    assert obs_types is None or all(t in vector_generators.keys() for t in obs_types), "Unknown obs type"
+    assert var_types is None or all(t in vector_generators.keys() for t in var_types), "Unknown var type"
     assert obsm_types is None or all(
-        t in matrix_generators.keys() or t in vector_generators.keys()
-        for t in obsm_types
+        t in matrix_generators.keys() or t in vector_generators.keys() for t in obsm_types
     ), "Unknown obsm type"
     assert varm_types is None or all(
-        t in matrix_generators.keys() or t in vector_generators.keys()
-        for t in varm_types
+        t in matrix_generators.keys() or t in vector_generators.keys() for t in varm_types
     ), "Unknown varm type"
-    assert obsp_types is None or all(
-        t in matrix_generators.keys() for t in obsp_types
-    ), "Unknown obsp type"
-    assert varp_types is None or all(
-        t in matrix_generators.keys() for t in varp_types
-    ), "Unknown varp type"
+    assert obsp_types is None or all(t in matrix_generators.keys() for t in obsp_types), "Unknown obsp type"
+    assert varp_types is None or all(t in matrix_generators.keys() for t in varp_types), "Unknown varp type"
     # TODO uns types
 
     if layer_types is None:  # layer_types are all matrices
@@ -108,31 +95,43 @@ def generate_dataset(
     if var_types is None:  # var_types are all vectors
         var_types = list(vector_generators.keys())
     if obsm_types is None:  # obsm_types are all matrices or vectors, except for categoricals and nullables
-        vector_not_allowed = set(["categorical", "categorical_ordered", "categorical_missing_values", "categorical_ordered_missing_values", \
-                                  "nullable_integer_array", "nullable_boolean_array"])
+        vector_not_allowed = set(
+            [
+                "categorical",
+                "categorical_ordered",
+                "categorical_missing_values",
+                "categorical_ordered_missing_values",
+                "nullable_integer_array",
+                "nullable_boolean_array",
+            ]
+        )
         obsm_types = set(matrix_generators.keys()) - vector_not_allowed
     if varm_types is None:  # varm_types are all matrices or vectors, except for categoricals and nullables
-        vector_not_allowed = set(["categorical", "categorical_ordered", "categorical_missing_values", "categorical_ordered_missing_values", \
-                                  "nullable_integer_array", "nullable_boolean_array"])
+        vector_not_allowed = set(
+            [
+                "categorical",
+                "categorical_ordered",
+                "categorical_missing_values",
+                "categorical_ordered_missing_values",
+                "nullable_integer_array",
+                "nullable_boolean_array",
+            ]
+        )
         varm_types = set(matrix_generators.keys()) - vector_not_allowed
     if obsp_types is None:  # obsp_types are all matrices
         obsp_types = list(matrix_generators.keys())
     if varp_types is None:  # varp_types are all matrices
         varp_types = list(matrix_generators.keys())
     if uns_types is None:
-        uns_types = (
-            list(vector_generators.keys())
-            + list(matrix_generators.keys())
-            + list(scalar_generators.keys())
-        )
+        uns_types = list(vector_generators.keys()) + list(matrix_generators.keys()) + list(scalar_generators.keys())
     if nested_uns_types is None:
         nested_uns_types = (
-            list(vector_generators.keys())
-            + list(matrix_generators.keys())
-            + list(scalar_generators.keys())
+            list(vector_generators.keys()) + list(matrix_generators.keys()) + list(scalar_generators.keys())
         )
 
-    X = matrix_generators[x_type](n_obs, n_vars)
+    X = None
+    if x_type is not None:
+        X = matrix_generators[x_type](n_obs, n_vars)
     layers = {t: matrix_generators[t](n_obs, n_vars) for t in layer_types}
 
     obs_names = [f"Cell{i:03d}" for i in range(n_obs)]
@@ -163,7 +162,7 @@ def generate_dataset(
     uns = generate_dict(n_obs, n_vars, uns_types, nested_uns_types)
 
     return ad.AnnData(
-        X,
+        X=X,
         layers=layers,
         obs=obs,
         var=var,
@@ -176,4 +175,6 @@ def generate_dataset(
 
 
 def check_iterable_types(iterable_types, name):
-    assert iterable_types is None or (isinstance(iterable_types, Iterable) and not isinstance(iterable_types, str)), f"{name} should be a non-string iterable type"
+    assert iterable_types is None or (
+        isinstance(iterable_types, Iterable) and not isinstance(iterable_types, str)
+    ), f"{name} should be a non-string iterable type"
