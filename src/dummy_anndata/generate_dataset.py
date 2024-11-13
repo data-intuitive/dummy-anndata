@@ -118,6 +118,7 @@ def generate_dataset(
             ]
         )
         varm_types = list(set(matrix_generators.keys()) - vector_not_allowed)
+
     if obsp_types is None:  # obsp_types are all matrices
         obsp_types = list(matrix_generators.keys())
     if varp_types is None:  # varp_types are all matrices
