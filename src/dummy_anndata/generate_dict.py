@@ -4,6 +4,7 @@ from typing import Union
 
 from .generate_matrix import matrix_generators, generated_matrix_types
 from .generate_vector import vector_generators, generated_vector_types
+from .generate_dataframe import generate_dataframe
 
 scalar_generators = {
     "string": "version",
@@ -57,7 +58,10 @@ def generate_dict(
             + [f"scalar_{t}" for t in vector_generators.keys()]
             + list(vector_generators.keys())
             + list(matrix_generators.keys())
+            + [f"df_{t}" for t in vector_generators.keys()]
         )
+
+
 
     if nested_uns_types is None:
         nested_uns_types = (
@@ -65,11 +69,14 @@ def generate_dict(
             + [f"scalar_{t}" for t in vector_generators.keys()]
             + list(vector_generators.keys())
             + list(matrix_generators.keys())
+            + [f"df_{t}" for t in vector_generators.keys()]
         )
 
     data = {}
     if types:  # types is not empty
-        data = {t: generate_type(t, n_rows, n_cols) for t in types}
+        df_types = [t[:3] for t in types if t[:3] == "df_"]
+        data = {t: generate_type(t, n_rows, n_cols) for t in types if t[:3] != "df_"}
+        data["dataframe"] = generate_dataframe(n_rows, types=df_types)
     if nested_uns_types:
         data["nested"] = generate_dict(n_rows, n_cols, types=nested_uns_types, nested_uns_types=[])
 
