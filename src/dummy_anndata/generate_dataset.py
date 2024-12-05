@@ -151,8 +151,10 @@ def generate_dataset(
             obsm[t] = matrix_generators[t](n_obs, n_obs)
         elif t in vector_generators.keys():
             obsm[t] = vector_generators[t](n_obs)
-    df_obs_types = [t[3:] for t in obsm_types if t[:3] == "df_"]
-    obsm["dataframe"] = generate_dataframe(n_obs, df_obs_types)
+    df_obsm_types = [t[3:] for t in obsm_types if t[:3] == "df_"]
+    if df_obsm_types:
+        obsm["dataframe"] = generate_dataframe(n_obs, df_obsm_types)
+        obsm["dataframe"].index = obs_names
 
     varm = {}
     for t in varm_types:
@@ -161,7 +163,9 @@ def generate_dataset(
         elif t in vector_generators.keys():
             varm[t] = vector_generators[t](n_vars)
     df_varm_types = [t[3:] for t in varm_types if t[:3] == "df_"]
-    varm["dataframe"] = generate_dataframe(n_vars, df_varm_types)
+    if df_varm_types:
+        varm["dataframe"] = generate_dataframe(n_vars, df_varm_types)
+        varm["dataframe"].index = var_names
 
     obsp = {t: matrix_generators[t](n_obs, n_obs) for t in obsp_types}
     varp = {t: matrix_generators[t](n_vars, n_vars) for t in varp_types}
