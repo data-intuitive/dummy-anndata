@@ -40,7 +40,9 @@ def generate_dataset(
     var_types : list of str, optional
         Types of vectors to generate for `var`. Each type must be a key in `vector_generators`.
     obsm_types : list of str, optional
-        Types of matrices or vectors to generate for `obsm`. Each type must be a key in `matrix_generators` or `vector_generators`.
+        Types of matrices or vectors to generate for `obsm`. Each type must be a key in `matrix_generators` or `vector_generators`,
+        or should be a key in `vector_generators` prepended by `df_`, and will be used in the generation of a dataframe with the
+        corresponding vector_generators.
     varm_types : list of str, optional
         Types of matrices or vectors to generate for `varm`. Each type must be a key in `matrix_generators` or `vector_generators`,
         or should be a key in `vector_generators` prepended by `df_`, and will be used in the generation of a dataframe with the
