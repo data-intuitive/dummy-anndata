@@ -40,9 +40,13 @@ def generate_dataset(
     var_types : list of str, optional
         Types of vectors to generate for `var`. Each type must be a key in `vector_generators`.
     obsm_types : list of str, optional
-        Types of matrices or vectors to generate for `obsm`. Each type must be a key in `matrix_generators` or `vector_generators`.
+        Types of matrices or vectors to generate for `obsm`. Each type must be a key in `matrix_generators` or `vector_generators`,
+        or should be a key in `vector_generators` prepended by `df_`, and will be used in the generation of a dataframe with the
+        corresponding vector_generators.
     varm_types : list of str, optional
-        Types of matrices or vectors to generate for `varm`. Each type must be a key in `matrix_generators` or `vector_generators`.
+        Types of matrices or vectors to generate for `varm`. Each type must be a key in `matrix_generators` or `vector_generators`,
+        or should be a key in `vector_generators` prepended by `df_`, and will be used in the generation of a dataframe with the
+        corresponding vector_generators.
     obsp_types : list of str, optional
         Types of matrices to generate for `obsp`. Each type must be a key in `matrix_generators`.
     varp_types : list of str, optional
@@ -79,10 +83,10 @@ def generate_dataset(
     assert obs_types is None or all(t in vector_generators.keys() for t in obs_types), "Unknown obs type"
     assert var_types is None or all(t in vector_generators.keys() for t in var_types), "Unknown var type"
     assert obsm_types is None or all(
-        t in matrix_generators.keys() or t in vector_generators.keys() for t in obsm_types
+        t in matrix_generators.keys() or t in vector_generators.keys() or t[3:] in vector_generators and t[:3] == "df_" for t in obsm_types
     ), "Unknown obsm type"
     assert varm_types is None or all(
-        t in matrix_generators.keys() or t in vector_generators.keys() for t in varm_types
+        t in matrix_generators.keys() or t in vector_generators.keys() or t[3:] in vector_generators and t[:3] == "df_" for t in varm_types
     ), "Unknown varm type"
     assert obsp_types is None or all(t in matrix_generators.keys() for t in obsp_types), "Unknown obsp type"
     assert varp_types is None or all(t in matrix_generators.keys() for t in varp_types), "Unknown varp type"
@@ -105,7 +109,7 @@ def generate_dataset(
                 "nullable_boolean_array",
             ]
         )
-        obsm_types = list(set(matrix_generators.keys()) - vector_not_allowed)
+        obsm_types = list(set(matrix_generators.keys()) - vector_not_allowed) + [f"df_{t}" for t in vector_generators.keys()]
     if varm_types is None:  # varm_types are all matrices or vectors, except for categoricals and nullables
         vector_not_allowed = set(
             [
@@ -117,7 +121,7 @@ def generate_dataset(
                 "nullable_boolean_array",
             ]
         )
-        varm_types = list(set(matrix_generators.keys()) - vector_not_allowed)
+        varm_types = list(set(matrix_generators.keys()) - vector_not_allowed) + [f"df_{t}" for t in vector_generators.keys()]
 
     if obsp_types is None:  # obsp_types are all matrices
         obsp_types = list(matrix_generators.keys())
@@ -149,6 +153,10 @@ def generate_dataset(
             obsm[t] = matrix_generators[t](n_obs, n_obs)
         elif t in vector_generators.keys():
             obsm[t] = vector_generators[t](n_obs)
+    df_obsm_types = [t[3:] for t in obsm_types if t[:3] == "df_"]
+    if df_obsm_types:
+        obsm["dataframe"] = generate_dataframe(n_obs, df_obsm_types)
+        obsm["dataframe"].index = obs_names
 
     varm = {}
     for t in varm_types:
@@ -156,6 +164,10 @@ def generate_dataset(
             varm[t] = matrix_generators[t](n_vars, n_vars)
         elif t in vector_generators.keys():
             varm[t] = vector_generators[t](n_vars)
+    df_varm_types = [t[3:] for t in varm_types if t[:3] == "df_"]
+    if df_varm_types:
+        varm["dataframe"] = generate_dataframe(n_vars, df_varm_types)
+        varm["dataframe"].index = var_names
 
     obsp = {t: matrix_generators[t](n_obs, n_obs) for t in obsp_types}
     varp = {t: matrix_generators[t](n_vars, n_vars) for t in varp_types}
