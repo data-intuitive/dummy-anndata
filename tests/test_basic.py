@@ -1,5 +1,5 @@
 import dummy_anndata
-
+import pytest
 
 def test_package_has_version():
     assert dummy_anndata.__version__ is not None
@@ -27,3 +27,15 @@ def test_uns():
 def test_empty_x():
     dummy = dummy_anndata.generate_dataset()
     assert dummy.X is None
+
+
+def test_forbidden_obsm_varm_types():
+    with pytest.raises(AssertionError) as ae:
+        dummy = dummy_anndata.generate_dataset(obsm_types=["categorical"])
+
+    assert ae.match("Forbidden obsm type")
+
+    with pytest.raises(AssertionError) as ae:
+        dummy = dummy_anndata.generate_dataset(varm_types=["categorical"])
+
+    assert ae.match("Forbidden varm type")
