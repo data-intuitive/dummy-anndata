@@ -14,6 +14,12 @@ def int_mtx(n_obs, n_vars):
     mtx = np.arange(n_obs * n_vars).reshape(n_obs, n_vars)
     return mtx
 
+def float_mtx_nd(nr_values, dimensions, NAs=False):
+    # add 0.5 to easily spot conversion issues
+    mtx = np.arange(nr_values, dtype=float).reshape(dimensions) + 0.5
+    if NAs:  # numpy matrices do no support pd.NA
+        mtx[0, 0] = np.nan
+    return mtx
 
 # Possible matrix generators
 # integer matrices do not support NAs in Python
@@ -27,6 +33,7 @@ matrix_generators = {
     "integer_matrix": lambda n_obs, n_vars: int_mtx(n_obs, n_vars),
     "integer_csparse": lambda n_obs, n_vars: sp.sparse.csc_matrix(int_mtx(n_obs, n_vars)),
     "integer_rsparse": lambda n_obs, n_vars: sp.sparse.csr_matrix(int_mtx(n_obs, n_vars)),
+    "float_matrix_3d": lambda n_obs, n_vars: float_mtx_nd(n_obs * n_vars * 3, (n_obs, n_vars, 3)),
 }
 
 generated_matrix_types = np.ndarray | sp.sparse.csc_matrix | sp.sparse.csr_matrix
