@@ -118,7 +118,6 @@ def generate_dataset(
         obsm_types = list(set(matrix_generators.keys()) - obsm_vector_forbidden) + [f"df_{t}" for t in vector_generators.keys()]
     if varm_types is None:  # varm_types are all matrices or vectors, except for categoricals and nullables
         varm_types = list(set(matrix_generators.keys()) - varm_vector_forbidden) + [f"df_{t}" for t in vector_generators.keys()]
-
     if obsp_types is None:  # obsp_types are all matrices
         obsp_types = list(matrix_generators.keys())
     if varp_types is None:  # varp_types are all matrices
