@@ -27,12 +27,12 @@ def int_mtx_nd(nr_values, dimensions, NAs=False):
     return mtx
 
 def float_mtx_sparse_nd(nr_values, dimensions, row_major=True, NAs=False):
-
     mtx = float_mtx_nd(nr_values, dimensions, NAs)
     if row_major:
         return sp.sparse.csr_matrix(mtx)
     else:
         return sp.sparse.csc_matrix(mtx)
+
 
 # Possible matrix generators
 # integer matrices do not support NAs in Python
@@ -61,7 +61,6 @@ extra_uns_matrix_generators = {
     "bool_matrix": lambda n_obs, n_vars: np.array([True for _ in range(n_obs * n_vars)]).reshape(n_obs, n_vars),
     "string_matrix_3d": lambda n_obs, n_vars: string_matrix_nd(n_obs * n_vars * 3, (n_obs, n_vars, 3)),
     "bool_matrix_3d": lambda n_obs, n_vars: bool_matrix_nd(n_obs * n_vars * 3, (n_obs, n_vars, 3)),
-}
 
 generated_matrix_types = np.ndarray | sp.sparse.csc_matrix | sp.sparse.csr_matrix
 
