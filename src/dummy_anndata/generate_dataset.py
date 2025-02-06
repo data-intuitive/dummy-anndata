@@ -4,7 +4,7 @@ import anndata as ad
 
 from .generate_dataframe import generate_dataframe
 from .generate_dict import generate_dict, scalar_generators
-from .generate_matrix import matrix_generators
+from .generate_matrix import matrix_generators, extra_uns_matrix_generators
 from .generate_vector import vector_generators
 
 
@@ -52,10 +52,11 @@ def generate_dataset(
     varp_types : list of str, optional
         Types of matrices to generate for `varp`. Each type must be a key in `matrix_generators`.
     uns_types : list of str, optional
-        Types of data to generate for `uns`. Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators`.
+        Types of data to generate for `uns`. Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators`
+        or `extra_uns_matrix_generators`.
     nested_uns_types : list of str, optional
         Types of data to generate for the nested `uns` dictionary. They will be a new dictionary at the key `nested`.
-        Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators`.
+        Each type must be a key in `vector_generators`, `matrix_generators`, or `scalar_generators` or `extra_uns_matrix_generators`.
 
     Returns
     -------
@@ -128,10 +129,10 @@ def generate_dataset(
     if varp_types is None:  # varp_types are all matrices
         varp_types = list(matrix_generators.keys())
     if uns_types is None:
-        uns_types = list(vector_generators.keys()) + list(matrix_generators.keys()) + list(scalar_generators.keys())
+        uns_types = list(vector_generators.keys()) + list(matrix_generators.keys()) + list(scalar_generators.keys()) + list(extra_uns_matrix_generators.keys())
     if nested_uns_types is None:
         nested_uns_types = (
-            list(vector_generators.keys()) + list(matrix_generators.keys()) + list(scalar_generators.keys())
+            list(vector_generators.keys()) + list(matrix_generators.keys()) + list(scalar_generators.keys()) + list(extra_uns_matrix_generators.keys())
         )
 
     X = None

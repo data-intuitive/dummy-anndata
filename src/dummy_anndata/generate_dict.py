@@ -2,7 +2,7 @@ import numpy as np
 
 from typing import Union
 
-from .generate_matrix import matrix_generators, generated_matrix_types
+from .generate_matrix import matrix_generators, generated_matrix_types, extra_uns_matrix_generators
 from .generate_vector import vector_generators, generated_vector_types
 from .generate_dataframe import generate_dataframe
 
@@ -32,6 +32,8 @@ def generate_type(type, n_rows, n_cols):
         return vector_generators[type](n_rows)
     if type in matrix_generators:
         return matrix_generators[type](n_rows, n_cols)
+    if type in extra_uns_matrix_generators:
+        return extra_uns_matrix_generators[type](n_rows, n_cols)
     return None
 
 all_types = generated_scalar_types | generated_vector_types | generated_matrix_types
