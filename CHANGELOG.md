@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning][].
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
+## 0.0.3
+
+### Bugfixes
+- [Explicitly check for forbidden types in obsm and varm](https://github.com/data-intuitive/dummy-anndata/pull/14)
+
+### Improvements
+- [Allow dataframe generation using df prefix](https://github.com/data-intuitive/dummy-anndata/pull/13)
+- Allow generation of 3D matrices of [floats](https://github.com/data-intuitive/dummy-anndata/pull/16), [integers and 2D matrices of strings and booleans](https://github.com/data-intuitive/dummy-anndata/pull/17)
+
 ## 0.0.2
 
 ### Bugfixes
